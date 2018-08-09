@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     let loginData: ILogin;
     let keepMeSignIn: boolean;
 
-    // console.log('loginData:', form.value);
-    return;
+   console.log('loginData:', form.value);
+
 
     if (form.valid) {
       loginData = {
@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginSubscription = this.authService
         .logIn(loginData, keepMeSignIn)
         .subscribe(result => {
+          console.log('result:', result);
           if (result.user) {
             const returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
             this.router.navigate([returnUrl || "/"]);
