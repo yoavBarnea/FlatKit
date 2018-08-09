@@ -42,6 +42,10 @@ export class AuthService {
     return this.appStorage.getItem('token');
   }
 
+  get isLoggednIn() {
+    return this.token !== null;
+  }
+
   logout() {
     this.appStorage.removeItem("LoggedInUser");
     this.appStorage.removeItem("token");
@@ -53,7 +57,7 @@ export class AuthService {
     if (isRememberMe) {
       this.appStorage = localStorage;
     }
-    const url = "http://globalbit.co.il/front-end-assignment/login.php";
+    const url = "https://globalbit.co.il/front-end-assignment/login.php";
 
     return this.http.post<ILoginSuccessResponse>(url, loginData).pipe(
       tap(loggedInUser => {
@@ -64,8 +68,5 @@ export class AuthService {
     );
   }
 
-  isLoggednIn() {
-    return this.token !== null;
-  }
 
 }
