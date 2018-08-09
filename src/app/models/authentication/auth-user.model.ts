@@ -1,7 +1,7 @@
-import { AuthUserProfile } from './auth-user-profile.model';
+import { IAuthUserProfile } from './auth-user-profile.model';
 
-export interface AuthUser {
+export interface IAuthUser {
   "id": number ;
   "email": string;
-  "profile": AuthUserProfile;
+  "profile": IAuthUserProfile;
 }

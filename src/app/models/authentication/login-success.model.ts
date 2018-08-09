@@ -1,6 +1,6 @@
-import { AuthUser } from './auth-user.model';
+import { IAuthUser } from './auth-user.model';
 
 export interface ILoginSuccessResponse {
     error: Object;
-    user: AuthUser;
+    user: IAuthUser;
 }
