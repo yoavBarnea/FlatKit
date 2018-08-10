@@ -6,8 +6,8 @@
 
     <div class="form-group">
       <label for="loginEmail">Email</label>
-      <input type="email" class="form-control" id="loginEmail" name="loginEmail" placeholder="email" ngModel #vEmail="ngModel"
-        required>
+      <input type="email" class="form-control" id="loginEmail" name="loginEmail" placeholder="email"
+      (change)="onEmail($event)"  [(ngModel)]="loginEmail" ngModel #vEmail="ngModel" required email>
     </div>
     <div class="text-danger" *ngIf="vEmail.touched && vEmail.invalid">
       <span *ngIf="vEmail.errors.required ">email is required</span>
@@ -26,7 +26,7 @@
     </div>
     <button type="submit" class="btn btn-block btn-success" [disabled]="vLoginForm.invalid">Submit</button>
   </form>
-  <button class="btn btn-block btn-link text-success">Forgot password?</button>
+  <button class="btn btn-block btn-link text-success" routerLink="./forget-password">Forgot password?</button>
 
   <p class="text-center"> Do not have an account?
     <button class="btn btn-link text-success">Sign up</button>

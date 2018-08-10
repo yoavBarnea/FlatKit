@@ -13,8 +13,9 @@ import { AuthService } from "./../../core/services/auth.service";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private loginSubscription: Subscription = new Subscription();
 
-  private loginSubscription: Subscription;
+  loginEmail = this.authService.loginEmail;
 
   constructor(
     private router: Router,
@@ -22,14 +23,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {}
 
-  ngOnInit() {}
+  onEmail(event) {
+    this.authService.loginEmail = event.target.value;
+  }
 
   login(form: FormGroup) {
     let loginData: ILogin;
+
     let keepMeSignIn: boolean;
 
-   console.log('loginData:', form.value);
-
+    console.log("loginData:", form.value);
 
     if (form.valid) {
       loginData = {
@@ -39,17 +42,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       keepMeSignIn = form.value.keepMeSignIn || false;
 
       this.loginSubscription = this.authService
-        .logIn(loginData, keepMeSignIn)
+        .logIn(loginData, keepMeSignIn) // server request
         .subscribe(result => {
-          console.log('result:', result);
+          console.log("result:", result);
           if (result.user) {
-            const returnUrl = this.route.snapshot.queryParamMap.get("returnUrl");
+            const returnUrl = this.route.snapshot.queryParamMap.get(
+              "returnUrl"
+            );
             this.router.navigate([returnUrl || "/"]);
           }
         });
-
     }
   }
+
+  // ng hooks:
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.loginSubscription.unsubscribe();
