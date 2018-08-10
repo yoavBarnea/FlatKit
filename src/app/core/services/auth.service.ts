@@ -1,3 +1,4 @@
+import { environment } from "./../../../environments/environment";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
@@ -6,18 +7,20 @@ import { ILogin } from "../../models/authentication/login.model";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { ILoginSuccessResponse } from "../../models/authentication/login-success.model";
+import {
+  IForgotPasswordRequest,
+  IForgotPasswordResponse
+} from "../../models/authentication/forgot-password.model";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
-
-
   constructor(private router: Router, private http: HttpClient) {}
 
   private appStorage: Storage = sessionStorage;
 
-  loginEmail = '';
+  loginEmail = "";
 
   private handleError(err: HttpErrorResponse) {
     if (err.error instanceof ErrorEvent) {
@@ -34,18 +37,16 @@ export class AuthService {
   }
 
   private setLoggedInUser(loggedInUser: ILoginSuccessResponse) {
-    this.appStorage.setItem("LoggedInUser", JSON.stringify(loggedInUser)) ;
+    this.appStorage.setItem("LoggedInUser", JSON.stringify(loggedInUser));
     this.appStorage.setItem("token", loggedInUser.user.id.toString());
   }
-
-
 
   get LoggedInUser() {
     return localStorage.getItem("LoggedInUser") || null;
   }
 
   get token() {
-    return this.appStorage.getItem('token');
+    return this.appStorage.getItem("token");
   }
 
   get isLoggednIn() {
@@ -60,10 +61,11 @@ export class AuthService {
   }
 
   logIn(loginData: ILogin, isRememberMe: boolean) {
+    const url = environment.baseURL + "/login.php";
+
     if (isRememberMe) {
       this.appStorage = localStorage;
     }
-    const url = "https://globalbit.co.il/front-end-assignment/login.php";
 
     return this.http.post<ILoginSuccessResponse>(url, loginData).pipe(
       tap(loggedInUser => {
@@ -74,5 +76,11 @@ export class AuthService {
     );
   }
 
+  forgetPassword(payload: IForgotPasswordRequest) {
+    const url = environment.baseURL + "/forgot-password.php";
 
+    return this.http
+      .post<IForgotPasswordResponse>(url, payload)
+      .pipe(catchError(this.handleError));
+  }
 }
