@@ -11,9 +11,13 @@ import { ILoginSuccessResponse } from "../../models/authentication/login-success
   providedIn: "root"
 })
 export class AuthService {
+
+
   constructor(private router: Router, private http: HttpClient) {}
 
   private appStorage: Storage = sessionStorage;
+
+  loginEmail = '';
 
   private handleError(err: HttpErrorResponse) {
     if (err.error instanceof ErrorEvent) {
@@ -33,6 +37,8 @@ export class AuthService {
     this.appStorage.setItem("LoggedInUser", JSON.stringify(loggedInUser)) ;
     this.appStorage.setItem("token", loggedInUser.user.id.toString());
   }
+
+
 
   get LoggedInUser() {
     return localStorage.getItem("LoggedInUser") || null;
