@@ -7,10 +7,11 @@
     <div class="form-group">
       <label for="loginEmail">Email</label>
       <input type="email" class="form-control" id="loginEmail" name="loginEmail" placeholder="email"
-      (change)="onEmail($event)"  [(ngModel)]="loginEmail" ngModel #vEmail="ngModel" required email>
+      (change)="onEmail($event)"  [(ngModel)]="loginEmail" ngModel #vEmail="ngModel" required email >
     </div>
     <div class="text-danger" *ngIf="vEmail.touched && vEmail.invalid">
       <span *ngIf="vEmail.errors.required ">email is required</span>
+      <span *ngIf="vEmail.errors.email ">email is not correct</span>
     </div>
     <div class="form-group">
       <label for="loginPassword">Password</label>
