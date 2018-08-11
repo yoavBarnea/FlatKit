@@ -1,3 +1,4 @@
+import { IAuthUser } from './../../models/authentication/auth-user.model';
 import { environment } from "./../../../environments/environment";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
@@ -24,7 +25,7 @@ export class AuthService {
 
   private handleError(err: HttpErrorResponse) {
     if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred.
+      // TODO: A client-side or network error occurred.
       console.error("An error occurred:", err.error.message);
     } else {
       // server side error
@@ -36,13 +37,13 @@ export class AuthService {
     return throwError("Something bad happened; please try again later.");
   }
 
-  private setLoggedInUser(loggedInUser: ILoginSuccessResponse) {
-    this.appStorage.setItem("LoggedInUser", JSON.stringify(loggedInUser));
-    this.appStorage.setItem("token", loggedInUser.user.id.toString());
+  private setLoggedInUser(authUser: IAuthUser) {
+    this.appStorage.setItem("LoggedInUser", JSON.stringify(authUser));
+    this.appStorage.setItem("token", authUser.id.toString());
   }
 
-  get LoggedInUser() {
-    return localStorage.getItem("LoggedInUser") || null;
+  get LoggedInUser(): any {
+    return JSON.parse(this.appStorage.getItem("LoggedInUser")) || null;
   }
 
   get token() {
@@ -50,14 +51,14 @@ export class AuthService {
   }
 
   get isLoggednIn() {
-    return this.token !== null;
+    return this.token ? true : false;
   }
 
   logout() {
     this.appStorage.removeItem("LoggedInUser");
     this.appStorage.removeItem("token");
     this.appStorage = sessionStorage;
-    this.router.navigate(["login"]);
+   // this.router.navigate(["login"]);
   }
 
   logIn(loginData: ILogin, isRememberMe: boolean) {
@@ -66,11 +67,15 @@ export class AuthService {
     if (isRememberMe) {
       this.appStorage = localStorage;
     }
-
-    return this.http.post<ILoginSuccessResponse>(url, loginData).pipe(
-      tap(loggedInUser => {
-        this.setLoggedInUser(loggedInUser);
-        this.router.navigate(["home"]);
+   //  return this.http.post<ILoginSuccessResponse>(url, loginData).pipe(
+    return this.http.post<any>(url, loginData).pipe(
+      tap((resBody) => {
+        if ( resBody.user) {
+          this.setLoggedInUser(resBody.user);
+          this.router.navigate(["/home"]);
+        } else {
+         // TODO: console.log(resBody.error);
+        }
       }),
       catchError(this.handleError)
     );

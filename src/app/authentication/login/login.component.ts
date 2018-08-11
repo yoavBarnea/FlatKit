@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             const returnUrl = this.route.snapshot.queryParamMap.get(
               "returnUrl"
             );
-            this.router.navigate([returnUrl || "/"]);
+            this.router.navigate([returnUrl || "/home"]);
           }
         });
     }
