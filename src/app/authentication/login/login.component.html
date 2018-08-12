@@ -2,7 +2,7 @@
 <div>
   <h2>
     Sign in with your Flatkit Account </h2>
-  <form (ngSubmit)="login(vLoginForm)" #vLoginForm="ngForm">
+  <form (ngSubmit)="login(vLoginForm)" (change) = "problem=false" #vLoginForm="ngForm">
 
     <div class="form-group">
       <label for="loginEmail">Email</label>
@@ -32,13 +32,10 @@
   <p class="text-center"> Do not have an account?
     <button class="btn btn-link text-success">Sign up</button>
   </p>
+  <ng-container *ngIf="problem">
+      <div class="alert alert-danger" >
+         your password or email are incorrect'
+     </div>
+   </ng-container>
 </div>
-<!--
- <ng-container *ngIf="(loginResponse$ | async) as loginResponse">
-   <div class="alert alert-danger" *ngIf="loginResponse.error">
-    your password or email are incorrect
-  </div>
-</ng-container>
-
--->
 </div>

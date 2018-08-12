@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loginEmail = this.authService.loginEmail;
 
+  problem = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -49,7 +51,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             const returnUrl = this.route.snapshot.queryParamMap.get(
               "returnUrl"
             );
+            this.problem = false ;
             this.router.navigate([returnUrl || "/home"]);
+          } else {
+            this.problem = true ;
           }
         });
     }
